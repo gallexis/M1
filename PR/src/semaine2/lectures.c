@@ -59,7 +59,7 @@ void lecture(char const * const nom_fichier) {
                     perror("Erreur de l'ouverture du fichier (open).\n");
                     exit(EXIT_FAILURE);
                 }
-                
+                printf("Open: %d\n",getpid());
                 lire_read(fd);
             }
             
@@ -70,7 +70,7 @@ void lecture(char const * const nom_fichier) {
                     perror("Erreur de l'ouverture du fichier (fopen).\n");
                     exit(EXIT_FAILURE);
                 }
-                
+                printf("Fopen: %d\n",getpid());
                 lire_fgetc(f);
             }
             

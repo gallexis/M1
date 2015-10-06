@@ -1,11 +1,11 @@
 CC=gcc
 CFLAGS=-Wall -ansi
-EXEC=forkfilemax
+EXEC=nfork
 
 ./bin/$(EXEC) : ./obj/$(EXEC).o
 	$(CC) -o $@ $^ $(CFLAGS)
 
-./obj/%.o: ./src/%.c 
+./obj/%.o: ./src/semaine1/%.c 
 	$(CC) -o $@ -c $< $(CFLAGS)
 
 clean:

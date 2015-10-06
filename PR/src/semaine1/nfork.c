@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <unistd.h>
 
 int nfork( int nb_fils){
     int compteur, compteurFilsCrees;

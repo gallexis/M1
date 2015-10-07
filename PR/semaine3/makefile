@@ -14,14 +14,17 @@ SRC =src/
 
 H=
 
-$(BIN)thread_create: $(OBJ)thread_create.o
+$(BIN)thread_wait: $(OBJ)thread_wait.o
 	$(CC) $(LFLAGS) -o $@ $<
 
 $(BIN)thread_rand: $(OBJ)thread_rand.o
 	$(CC) $(LFLAGS) -o $@ $<
-
-$(BIN)thread_wait: $(OBJ)thread_wait.o
+	
+	
+$(BIN)thread_create: $(OBJ)thread_create.o
 	$(CC) $(LFLAGS) -o $@ $<
+
+
 
 $(OBJ)%.o: $(SRC)%.c $H
 	$(CC) $(CFLAGS) -o $@ -c $<

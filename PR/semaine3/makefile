@@ -14,16 +14,20 @@ SRC =src/
 
 H=
 
+all: $(BIN)thread_broadcast
 
-$(BIN)thread_setdetach: $(OBJ)thread_setdetach.o
+$(BIN)thread_broadcast: $(OBJ)thread_broadcast.o
 	$(CC) $(LFLAGS) -o $@ $<
 
 $(BIN)thread_detach: $(OBJ)thread_detach.o
 	$(CC) $(LFLAGS) -o $@ $<
-
-
-$(BIN)thread_broadcast: $(OBJ)thread_broadcast.o
+	
+$(BIN)thread_setdetach: $(OBJ)thread_setdetach.o
 	$(CC) $(LFLAGS) -o $@ $<
+
+
+
+
 
 $(OBJ)%.o: $(SRC)%.c $H
 	$(CC) $(CFLAGS) -o $@ -c $<

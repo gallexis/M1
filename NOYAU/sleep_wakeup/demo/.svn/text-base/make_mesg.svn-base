@@ -1,0 +1,17 @@
+# Mettre dans SCHEDPATH le repertoire ou se trouve libsched.a
+# et sched.h
+SCHEDPATH = ../lib
+INC = ../include
+ 
+
+CFLAGS = -Wall -I$(INC) -m32
+
+all: mesg 
+	
+
+mesg: mesg.o  
+	gcc $(CFLAGS) -o mesg mesg.o -L$(SCHEDPATH) -lsched -L$(SCHEDPATH) -lelf 
+
+	
+clean: 
+	rm -f mesg mesg.o 

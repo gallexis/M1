@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include
+END
+callo.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/callo.h
+END
+buf.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/buf.h
+END
+proc.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/proc.h
+END
+synch.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/synch.h
+END
+types.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/types.h
+END
+conf.h
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/conf.h
+END
+sched.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/sched.h
+END
+var.h
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/include/var.h
+END

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo
+END
+make_sleep_wakeup
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo/make_sleep_wakeup
+END
+mesg.h
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo/mesg.h
+END
+test_sleep_wakeup.c
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo/test_sleep_wakeup.c
+END
+make_mesg
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo/make_mesg
+END
+mesg.c
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/svn/ens/MI013/!svn/ver/33/Sources_TMEs/sleep_wakeup/demo/mesg.c
+END

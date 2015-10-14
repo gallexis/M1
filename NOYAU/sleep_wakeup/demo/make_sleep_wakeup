@@ -1,0 +1,14 @@
+# Mettre dans SCHEDPATH le repertoire ou se trouve libsched.a
+# et sched.h
+SCHEDPATH = ../lib 
+INC = ../include
+
+CFLAGS = -Wall -I$(INC) -m32
+
+all: test_sleep_wakeup
+
+test_sleep_wakeup: test_sleep_wakeup.o  
+	gcc $(CFLAGS)  -o test_sleep_wakeup test_sleep_wakeup.o -L$(SCHEDPATH) -lsched -L$(SCHEDPATH) -lelf 
+
+clean: 
+	rm -f test_sleep_wakeup test_sleep_wakeup.o 

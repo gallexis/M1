@@ -68,10 +68,8 @@ int main(int argc, char *argv[])
     for(i=0 ; i < argc-2 ; i++)
     {        
         pthread_mutex_lock (&m);
-            if(cpt == max){
-                while (0 < cpt) {
-                    pthread_cond_wait (&cond,&m);
-                }
+            while (cpt == max) {
+                pthread_cond_wait (&cond,&m);
             }
         pthread_mutex_unlock (&m); 
         

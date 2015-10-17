@@ -82,40 +82,71 @@ void *consommateur()
 }
 
 
-int main()
+int main(int argc, char *argv[])
 {
     int *status;
-    pthread_t ids[2];
+    pthread_t *prods;
+    pthread_t *cons;
+    int maxProds;
+    int maxCons;
+    int i;
+    
+    maxProds = atoi(argv[1]);
+    maxCons = atoi(argv[2]);
+    
     pointeur = 0;   
-    ids[0] = 0;
-    ids[1] = 1;
     
-                            /* -- CREATE -- */
-    /* consommateur */
-    if (pthread_create (&ids[0], NULL, consommateur, (void*)0) != 0) {
-        perror("pthread_create \n");
-        exit (1);
-    }  
+    prods = malloc(maxProds*sizeof(pthread_t));
+    cons = malloc(maxCons*sizeof(pthread_t));
     
-    /* producteur */   
-    if (pthread_create (&ids[1], NULL, producteur, (void*)0) != 0) {
-        perror("pthread_create \n");
-        exit (1);
-    }      
     
-                            /* -- WAIT -- */
-    /* consommateur */
-    if (pthread_join(ids[0], (void**) &status) != 0) {
-        printf ("pthread_join"); 
-        exit (1);
+    
+    if(argc < 2){
+        printf("erreur arg");
+        return 0;
     }
-
-    /* producteur */  
-    if (pthread_join(ids[1], (void**) &status) != 0) {
-        printf ("pthread_join"); 
-        exit (1);
+    
+    
+    /* -- CREATE -- */
+    for(i=0 ; i < maxProds ; i++)
+    {
+        if (pthread_create (&prods[i], NULL, consommateur, (void*)0) != 0) {
+            perror("pthread_create \n");
+            exit (1);
+        }
     }
-
+    
+    for(i=0 ; i < maxCons ; i++)
+    {
+        if (pthread_create (&cons[i], NULL, producteur, (void*)0) != 0) {
+            perror("pthread_create \n");
+            exit (1);
+        }
+    }
+    
+    
+    
+    /* -- WAIT -- */
+    for(i=0 ; i < maxProds ; i++)
+    {
+        if (pthread_join(prods[i], (void**) &status) != 0) {
+            printf ("pthread_join");
+            exit (1);
+        }
+        else
+            printf ("Thread %d fini. \n",i);
+    }
+    
+    for(i=0 ; i < maxCons ; i++)
+    {
+        if (pthread_join(cons[i], (void**) &status) != 0) {
+            printf ("pthread_join");
+            exit (1);
+        }
+        else
+            printf ("Thread %d fini. \n",i);
+    }
+ 
     
     return 0;
 }

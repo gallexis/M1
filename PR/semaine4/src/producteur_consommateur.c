@@ -24,14 +24,14 @@ void push(int c)
 {
     pthread_mutex_lock(&p);
     
-        while( pointeur == (N-1) ) {
+        if( pointeur == (N-1) ) {
             pthread_cond_wait(&fullStack,&p);
         }    
         stack[pointeur] = c;
         
-        if ( pointeur == 0 )
+        if( pointeur == 0 )
         {
-            pthread_cond_broadcast(&emptyStack);
+            pthread_cond_signal(&emptyStack);
         }
     
     pointeur++;
@@ -45,16 +45,15 @@ int pop()
     int c;
     pthread_mutex_lock(&p);
     
-        while ( pointeur == 0 ) {
+        if ( pointeur == 0 ) {
             pthread_cond_wait(&emptyStack,&p);
         } 
-          
+        pointeur--;
+    
         c =  stack[pointeur];
     
-        pointeur--;
-        
         if( pointeur == (N-1) ) {
-            pthread_cond_broadcast(&fullStack);
+            pthread_cond_signal(&fullStack);
         }
     
                 
@@ -85,33 +84,32 @@ void *consommateur()
 int main()
 {
     int *status;
-    pthread_t ids[2];
-    pointeur = 0;   
-    ids[0] = 0;
-    ids[1] = 1;
+    pthread_t t1, t2;
+    pointeur = 0;
     
                             /* -- CREATE -- */
+    
+    /* producteur */
+    if (pthread_create (&t2, NULL, producteur, (void*)0) != 0) {
+        perror("pthread_create \n");
+        exit (1);
+    }
+
     /* consommateur */
-    if (pthread_create (&ids[0], NULL, consommateur, (void*)0) != 0) {
+    if (pthread_create (&t1, NULL, consommateur, (void*)0) != 0) {
         perror("pthread_create \n");
         exit (1);
     }  
     
-    /* producteur */   
-    if (pthread_create (&ids[1], NULL, producteur, (void*)0) != 0) {
-        perror("pthread_create \n");
-        exit (1);
-    }      
-    
                             /* -- WAIT -- */
     /* consommateur */
-    if (pthread_join(ids[0], (void**) &status) != 0) {
+    if (pthread_join(t1, (void**) &status) != 0) {
         printf ("pthread_join"); 
         exit (1);
     }
 
     /* producteur */  
-    if (pthread_join(ids[1], (void**) &status) != 0) {
+    if (pthread_join(t2, (void**) &status) != 0) {
         printf ("pthread_join"); 
         exit (1);
     }

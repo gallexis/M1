@@ -47,12 +47,11 @@ int pop()
     
         while ( pointeur == 0 ) {
             pthread_cond_wait(&emptyStack,&p);
-        } 
-          
+        }
+        pointeur--;
+    
         c =  stack[pointeur];
     
-        pointeur--;
-        
         if( pointeur == (N-1) ) {
             pthread_cond_broadcast(&fullStack);
         }
@@ -94,18 +93,15 @@ int main(int argc, char *argv[])
     maxProds = atoi(argv[1]);
     maxCons = atoi(argv[2]);
     
-    pointeur = 0;   
+    pointeur = 0;
     
     prods = malloc(maxProds*sizeof(pthread_t));
     cons = malloc(maxCons*sizeof(pthread_t));
-    
-    
     
     if(argc < 2){
         printf("erreur arg");
         return 0;
     }
-    
     
     /* -- CREATE -- */
     for(i=0 ; i < maxProds ; i++)
@@ -123,8 +119,7 @@ int main(int argc, char *argv[])
             exit (1);
         }
     }
-    
-    
+        
     
     /* -- WAIT -- */
     for(i=0 ; i < maxProds ; i++)

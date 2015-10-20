@@ -7,46 +7,33 @@
 #include <errno.h>
 
 #include <pthread.h>
-#include <signal.h>
 
-pthread_mutex_t m = PTHREAD_MUTEX_INITIALIZER;
-
-pthread_cond_t last_thread_created = PTHREAD_COND_INITIALIZER;
-pthread_cond_t last_thread_terminated = PTHREAD_COND_INITIALIZER;
-pthread_cond_t main_libere_thread = PTHREAD_COND_INITIALIZER;
-
-int nbThreads;
-int nbThreadsOrigine;
-
-void *thread()
-{
-    pthread_mutex_lock(&m);
+void* thread_func(void* arg) {
     
+    int i, nb;
+    int *param;
+    int *lvl = (int*)arg;
+    pthread_t *tid;
     
-    if(--nbThreads == 0)
-    {
-        pthread_cond_signal(&last_thread_created);
-    }
-    else
-    {
-        if (pthread_create (NULL, NULL, thread, (void*)0) != 0) {
-            perror("pthread_create \n");
-            exit (1);
+    nb = (*lvl)+1;
+    
+    if (*lvl < max) {
+        param = (int*)malloc(sizeof(int));
+        *param = nb;
+        tid = calloc(nb, sizeof(pthread_t));
+        printf("%d cree %d fils\n", (int)pthread_self(), nb);
+        for (i = 0; i < nb; i++) {
+            pthread_create((tid+i), 0, thread_func, param);
         }
+        for (i = 0; i < nb; i++)
+            pthread_join(tid[i], NULL);
     }
     
-    pthread_cond_wait(&main_libere_thread,&m);
+    if (*lvl > 1)
+        pthread_exit ( (void*)0);
     
-    
-    if(--nbThreadsOrigine == 0)
-        pthread_cond_signal(&last_thread_terminated);
-    
-    pthread_mutex_unlock(&m);
-    
-        
-    pthread_exit ((void*)0);
+    return (void*)0;
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -54,7 +41,7 @@ int main(int argc, char *argv[])
     int nbThreads;
     sigset_t sig_proc;
     
-    nbThreads = nbThreadsOrigine = atoi(argv[1]);
+    nbThreads = atoi(argv[1]);
     
     if(argc < 2){
         printf("missing arg");
@@ -65,11 +52,11 @@ int main(int argc, char *argv[])
     sigprocmask (SIG_SETMASK, &sig_proc, NULL);
     
     
-    if (pthread_create (&tid, NULL, thread, (void*)0) != 0) {
+    if (pthread_create (&tid, NULL, thread_func, (void*)0) != 0) {
         perror("pthread_create \n");
         exit (1);
     }
-
+    
     /* On attend d'être réveillé par la dernière thread */
     pthread_mutex_lock(&m);
     pthread_cond_wait(&last_thread_created, &m);
@@ -85,13 +72,12 @@ int main(int argc, char *argv[])
     pthread_cond_broadcast(&main_libere_thread);
     
     
-  
+    
     /* On attend d'être réveillé par la dernière thread */
     pthread_mutex_lock(&m);
     pthread_cond_wait(&last_thread_terminated, &m);
     pthread_mutex_unlock(&m);
-    
-    
 
-return 0;
+    
+    return 0;
 }

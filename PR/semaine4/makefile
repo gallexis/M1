@@ -1,9 +1,10 @@
 #			Programmation Repartie (4I400)
-#		Makefile pour TD 4. Processus légers et fichiers
+#		Makefile pour TM 4. Processus légers et signaux
 
 
+# Documentation: http://www.gnu.org/software/make/manual/make.html
 CC =gcc
-LFLAGS = -lpthread
+LFLAGS = -pthreads
 CFLAGS =-W -Wall -ansi -pedantic -Iinclude
 
 BIN =bin/
@@ -12,33 +13,33 @@ INCLUDE =include/
 LIB =lib/
 SRC =src/
 
-H=include/producteur_consommateur.h 
-O=src/upper.o
+.SUFFIXES:
 
-all: $(BIN)thread_upper $(BIN)thread_uppermax $(BIN)producteur_consommateur $(BIN)producteurs_consommateurs
-
-test: test-thread_upper test-thread_uppermax test-producteur_consommateur test-producteurs_consommateurs
-
-test-thread_upper: $(BIN)thread_upper
-	bin/thread_upper fichier1 fichier2 fichier3 fichier4
-
-test-thread_uppermax: $(BIN)thread_uppermax
-	bin/thread_uppermax 2 fichier1 fichier2 fichier3
-
-test-producteur_consommateur: $(BIN)producteur_consommateur
-	echo "123456789" | bin/producteur_consommateur
-
-test-producteurs_consommateurs: $(BIN)producteurs_consommateurs
-	echo "123456789" | bin/producteurs_consommateurs 5 3
+H=
+O=
 
 
-$(BIN)%: $(OBJ)%.o 
+.PHONY: all clean test
+tall: $(BIN)signal_thread $(BIN)thread_arborescent_sync
+test: test-signal_thread test-thread_arborescent_sync
+
+test-signal_thread: $(BIN)signal_thread
+	-bin/signal_thread 4
+
+test-thread_arborescent_sync: $(BIN)thread_arborescent_sync
+	-bin/thread_arborescent_sync 4
+
+
+clean:
+	rm -rf $(OBJ)*.o $(BIN)*
+
+$(BIN)%: $(OBJ)%.o $O
 	@if [ -d $(BIN) ]; then : ; else mkdir $(BIN); fi
-	$(CC) $(LFLAGS) -o $@ $<
+	$(CC) $(LFLAGS) -o $@ $^
 
 $(OBJ)%.o: $(SRC)%.c $H
 	@if [ -d $(OBJ) ]; then : ; else mkdir $(OBJ); fi
 	$(CC) $(CFLAGS) -o $@ -c $<
 
-clean: 
-	rm -rf $(OBJ)*.o $(BIN)*
+$(INCLUDE)%.h:
+	@if [ -d $(INCLUDE) ]; then : ; else mkdir $(INCLUDE); fi

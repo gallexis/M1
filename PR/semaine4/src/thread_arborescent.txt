@@ -1,0 +1,5 @@
+Il crée 2 fils
+
+	thread main
+
+tf1			tf2

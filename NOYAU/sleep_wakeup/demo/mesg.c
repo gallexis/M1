@@ -65,8 +65,9 @@ void DeposerFile(t_fmsg *f, void *d) {
 	f->nb_msg++;    
 	f->deposer++;
 	f->deposer %= MAXMSG;	
-	f->file[f->nb_msg-1].data = d;
-
+	f->file[f->deposer].data = d;
+    f->file[f->deposer].exp = GetElecProc() ;
+    
     unlock();    
     
     twakeup(f->file_vide);
@@ -81,7 +82,7 @@ void DeposerFile(t_fmsg *f, void *d) {
 void *RetirerFile(t_fmsg *f, int *exp) {
 
 	/* Code du TP à ajouter */
-	while(f->nb_msg <= MAXMSG)
+	while(f->nb_msg <= 0)
 	    tsleep(GetElecProc(),f->file_vide);
 	
 	lock();
@@ -89,13 +90,13 @@ void *RetirerFile(t_fmsg *f, int *exp) {
 	f->nb_msg--;    
 	f->retirer++;
 	f->retirer %= MAXMSG;	
-	exp = f->file[f->nb_msg-1].data;
+	*exp = f->file[f->retirer].exp ;
 
     unlock();    
     
-    twakeup(f->file_vide);
+    twakeup(f->file_pleine);
 	
-	return exp;
+	return f->file[f->retirer].data;
 }
 				
 void DetruireFile(t_fmsg *f) {

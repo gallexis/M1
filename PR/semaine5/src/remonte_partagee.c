@@ -29,17 +29,15 @@ void remonte_ipc( int nb_fils, int *p_int){
         {
             alea = (int) (10*(float)rand()/ RAND_MAX);
             
-            
-            /* LE POINTEUR NE SINCREMENTE PAS A CAUSE DU FORK */
-            *p_int++ = alea;
-            printf("m: %d",p_int);
+            *(p_int+compteur) = alea;
+            printf("m: %d",*p_int);
             exit(0);
         }
         
         /* Pere */
         else if( pid > 0 )
         {
-        
+            
         }
         else
         {

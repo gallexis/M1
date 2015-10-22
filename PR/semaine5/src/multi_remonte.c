@@ -37,8 +37,6 @@ void remonte_ipc( int nb_fils, struct messagePere *pere,int msg_id_pere)
     
     tmp =0;
     
-    
-    
     for(compteur=0;compteur<nb_fils;compteur++)
     {
         pid = fork();
@@ -51,18 +49,17 @@ void remonte_ipc( int nb_fils, struct messagePere *pere,int msg_id_pere)
             
             /* BUG */
             alea = (int) (10*(float)rand()/ RAND_MAX);
+            alea = 2;
             pere->nbMessagesMax = alea;
             pere->fils = &fils;
             
             msgsnd(msg_id_pere , pere , sizeof(struct messagePere), 0);
-            
             
             for (i=0;i<alea;i++ ) {
                 msgrcv(msg_id_fils , &fils , sizeof(struct messageFils), 1L,0);
                 tmp += fils.message;
             }
 
-            
             printf("Fils: %d - somme alea: %d\n", getpid(),tmp);
             
             msgctl(msg_id_fils, IPC_RMID, (struct msqid_ds *) NULL);

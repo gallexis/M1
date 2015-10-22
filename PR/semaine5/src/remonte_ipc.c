@@ -15,7 +15,6 @@
 #define MSG_SIZE 128
 
 struct message {
-    long type;
     int alea;
 } msg;
 
@@ -79,7 +78,6 @@ int main(int argc, char *argv[])
     cle = ftok("/tmp", 'Q');
     
     msg_id = msgget (cle, 0666 | IPC_CREAT);
-    msg.type = 1;
     
     remonte_ipc(nb_fils, &msg, msg_id);
     

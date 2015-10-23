@@ -21,7 +21,7 @@ O=
 
 .PHONY: all clean test
 all: $(BIN)remonte_ipc $(BIN)remonte_partagee $(BIN)multi_remonte $(BIN)multi_remonte_file_unique
-test: test-remonte_ipc test-remonte_partagee test-multi_remonte test-multi_remonte_file_unique
+test: test-remonte_ipc test-remonte_partagee test-multi_remonte_file_unique test-multi_remonte 
 
 test-remonte_ipc: $(BIN)remonte_ipc
 	-bin/remonte_ipc 4

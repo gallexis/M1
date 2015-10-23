@@ -52,8 +52,8 @@ void remonte_ipc( int nb_fils, int msg_id_pere)
             
             msgsnd(msg_id_pere , &msg , sizeof(int), 0);
             
-            for (i=0;i<alea;i++ ) {
-                printf("Fils: %d - attend\n",getpid());
+            for (i=0;i<alea;i++ )
+            {
                 msgrcv(msg_id_fils , &msg , sizeof(int), 1L,0);
                 tmp += msg.message;
             }
@@ -80,11 +80,10 @@ void remonte_ipc( int nb_fils, int msg_id_pere)
     {
         msgrcv(msg_id_pere , &msg , sizeof(int), 1L,0);
         
-        
         alea = msg.message;
         msg_id_fils = msg.msg_id_fils;
         
-        printf("aeee %d \n ",msg.msg_id_fils);
+        
         for(j=0;j<alea;j++)
         {
             msg.type = 1;
@@ -94,7 +93,7 @@ void remonte_ipc( int nb_fils, int msg_id_pere)
     }
     
     while ( waitpid(-1, NULL, 0) > 0 ) {
-        printf("Fils terminé\n ");
+        /* printf("Fils terminé\n "); */
     }
 }
 

@@ -1,4 +1,4 @@
-#define SVID_SOURCE 1
+#define _SVID_SOURCE 1
 #define _REENTRANT
 #include <unistd.h>
 #include <stdio.h>

@@ -1,4 +1,4 @@
-#define SVID_SOURCE 1
+#define _SVID_SOURCE 1
 #define _REENTRANT
 #include <unistd.h>
 #include <stdio.h>
@@ -90,7 +90,6 @@ void remonte_ipc( int nb_fils, int file)
 
 int main(int argc, char *argv[])
 {
-    int tmp;
     int nb_fils;
     key_t cle;
     int file;
@@ -99,7 +98,6 @@ int main(int argc, char *argv[])
     if(argc < 2){
         printf("missing arg");
     }
-    tmp=0;
     
     nb_fils = atoi(argv[1]);
     

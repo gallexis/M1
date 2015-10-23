@@ -30,7 +30,6 @@ void remonte_ipc( int nb_fils, int *p_int){
             alea = (int) (10*(float)rand()/ RAND_MAX);
             
             *(p_int+compteur) = alea;
-            printf("m: %d",*p_int);
             exit(0);
         }
         
@@ -73,7 +72,7 @@ int main(int argc, char *argv[])
     nb_fils = atoi(argv[1]);
     taille = nb_fils*sizeof(int);
     
-    cle = ftok("/tmp", 'M');
+    cle = ftok("remonte_partagee.c"  , getpid() & 0xFF);
     shm_id = shmget(cle, taille, 0666 | IPC_CREAT);
     adr_att = shmat(shm_id, 0, 0600);
     

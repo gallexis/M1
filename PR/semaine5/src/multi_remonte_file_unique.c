@@ -50,14 +50,19 @@ void remonte_ipc( int nb_fils, int msg_id_pere)
             msg.message = alea;
             msg.msg_id_fils = msg_id_fils;
             
-            msgsnd(msg_id_pere , &msg , sizeof(int), 0);
+            msgsnd(msg_id_pere , &msg , sizeof(msg), 0);
             
-            for (i=0;i<alea;i++ ) {
-                printf("Fils: %d - attend\n",getpid());
-                msgrcv(msg_id_fils , &msg , sizeof(int), 1L,0);
+            i=0;
+            for (;;) {
+                msgrcv(msg_id_fils , &msg , sizeof(msg), 1L,0);
                 tmp += msg.message;
+                
+                if(i == alea)
+                    break;
+                
+                i++;
             }
-
+            
             printf("Fils: %d - somme alea: %d\n", getpid(),tmp);
             
             msgctl(msg_id_fils, IPC_RMID, (struct msqid_ds *) NULL);
@@ -78,18 +83,16 @@ void remonte_ipc( int nb_fils, int msg_id_pere)
     
     for (i=0;i<nb_fils;i++ )
     {
-        msgrcv(msg_id_pere , &msg , sizeof(int), 1L,0);
-        
+        msgrcv(msg_id_pere , &msg , sizeof(msg), 1L,0);
         
         alea = msg.message;
         msg_id_fils = msg.msg_id_fils;
-        
-        printf("aeee %d \n ",msg.msg_id_fils);
         for(j=0;j<alea;j++)
         {
             msg.type = 1;
             msg.message =  (int) (100*(float)rand()/ RAND_MAX);
-            msgsnd(msg_id_fils , &msg , sizeof(int), 0);
+            
+            msgsnd(msg_id_fils , &msg , sizeof(msg), 0);
         }
     }
     
@@ -116,10 +119,9 @@ int main(int argc, char *argv[])
     cle = ftok("multi_remonte.c" ,getpid() & 0xFF);
     msg_id_pere = msgget (cle, 0666 | IPC_CREAT);
     
-    
     remonte_ipc(nb_fils, msg_id_pere);
     printf("prog terminé\n ");
-
+    
     
     msgctl(msg_id_pere, IPC_RMID, (struct msqid_ds *) NULL);
     

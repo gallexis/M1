@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include
+END
+callo.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/callo.h
+END
+buf.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/buf.h
+END
+proc.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/proc.h
+END
+synch.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/synch.h
+END
+types.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/types.h
+END
+conf.h
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/conf.h
+END
+sched.h
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/sched.h
+END
+var.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/include/var.h
+END

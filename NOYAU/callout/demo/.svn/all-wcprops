@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/demo
+END
+makecallo
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/demo/makecallo
+END
+test1_callo.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/demo/test1_callo.c
+END
+test2_callo.c
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/ens/MI013/!svn/ver/34/Sources_TMEs/callout/demo/test2_callo.c
+END

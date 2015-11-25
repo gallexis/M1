@@ -7,12 +7,17 @@
 #include <errno.h>
 #include <time.h>
 
+#include <sys/un.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #define SIZE_LINE 256
 
-void send_to_client( int sock, char *path, struct sockaddr dest)
+void send_to_client( int sock, char *path, struct sockaddr_in dest)
 {
     char line[SIZE_LINE];
     FILE *fp;
@@ -34,15 +39,12 @@ void send_to_client( int sock, char *path, struct sockaddr dest)
 
 int main(int argc, char *argv[])
 {
-    int i;
     int tmp;
     int port;
     int sock;
     struct sockaddr_in dest;
     int fromlen;
-    char message[80];
     struct addrinfo *result;
-    int cpt = 0;
     FILE *fd;
     fd = NULL;
     
@@ -73,7 +75,7 @@ int main(int argc, char *argv[])
     memset((char *)&dest,0, sizeof(dest));
     memcpy((void*)&((struct sockaddr_in*)result->ai_addr)->sin_addr, (void*)&dest.sin_addr, sizeof(dest));
     dest.sin_family = AF_INET;
-    dest.sin_port = htons(PORTSERV);
+    dest.sin_port = htons(port);
     
     send_to_client(sock,argv[3],dest);
     

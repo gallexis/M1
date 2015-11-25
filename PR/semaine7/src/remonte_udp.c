@@ -9,10 +9,12 @@
 
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/un.h>
+#include <string.h>
 
 #define MSG_SIZE 128
 
-void remonte_sock( int nb_fils, int sock){
+void remonte_sock( int nb_fils, int sock,struct sockaddr_un addr){
     
     int compteur;
     int alea;
@@ -27,11 +29,10 @@ void remonte_sock( int nb_fils, int sock){
         if(pid == 0)
         {
             alea = (int) (10*(float)rand()/ RAND_MAX);
-            message[0] = alea + '0'
-          
-            if (write(sock, message, strlen(message)+1) == -1) {
-                perror("write ");
-                exit(1);
+            message[0] = alea + '0';
+        
+            if (sendto(sock,message,strlen(message)+1,0,(struct sockaddr_un *)&addr, sizeof(addr)) == -1) {
+                perror("sendto"); exit(1);
             }
             exit(0);
         }
@@ -47,10 +48,7 @@ void remonte_sock( int nb_fils, int sock){
             exit(0);
         }
     }
-    
-    while ( waitpid(-1, NULL, 0) > 0 ) {
-        printf("Fils terminé\n ");
-    }
+
 }
 
 int main(int argc, char *argv[])
@@ -61,47 +59,51 @@ int main(int argc, char *argv[])
     int sock;
     struct sockaddr_un addr;
     char message[1];
+    socklen_t t =sizeof addr;
+    tmp=i=0;
     
-    tmp=0;
-    
-    if(argc < 2){
+    if(argc < 3){
         printf("missing arg");
     }
     
+    unlink(argv[1]);
     srand(time(NULL));
     
-    nb_fils = atoi(argv[1]);
-    taille = nb_fils*sizeof(int);
-   
-    
+    nb_fils = atoi(argv[2]);
 
-    memset(&addr,’\0’, sizeof(struct sockaddr_un));
+    memset(&addr,"\0", sizeof(const struct sockaddr_un));
     addr.sun_family = AF_UNIX;
-    strcpy(addr.sun_path, "./MySock");
+    strcpy(addr.sun_path, argv[1]);
     
-    if ((sock = socket(AF_UNIX, SOCK_STREAM, 0)) == -1)
+    if ((sock = socket(AF_UNIX, SOCK_DGRAM, 0)) == -1)
     {
         perror("Erreur creation socket");
         exit(1);
     }
     
-    if (bind(sock, (struct sockaddr *)&addr, strlen(addr.sa_data)) == -1)
+    if (bind(sock, (const struct sockaddr *)&addr, sizeof(struct sockaddr)) == -1)
     {
         perror("Erreur au nommage");
         exit(2);
     }
 
     
-    remonte_sock(nb_fils, sock);
+    remonte_sock(nb_fils, sock, addr);
     
     /*** Reception du message ***/
     while (i<nb_fils) {
-        if ( read(sock, message, strlen(message)+1) == -1) {
+        if ( recvfrom(sock,&message[0],strlen(message)+1,0,(struct sockaddr *)&addr,&t) == -1) {
             perror("recvfrom"); exit(2);
         }
-        tmp += atoi(message[0])
+
+        tmp += atoi(&message[0]);
         
         i++;
+    }
+    
+    
+    while ( waitpid(-1, NULL, 0) > 0 ) {
+        printf("Fils terminé\n ");
     }
     
     close(sock);

@@ -1,80 +1,53 @@
-#define _SVID_SOURCE 1
-#define _REENTRANT
-#include <unistd.h>
-#include <stdio.h>
+#define _XOPEN_SOURCE 700
 #include <stdlib.h>
-#include <ctype.h>
-#include <errno.h>
-#include <time.h>
-
+#include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h> 
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#define SIZE_MSG 100
 
-#define SIZE_LINE 256
-
-void send_to_server( int sock, char *buff, struct sockaddr dest)
+int main(int argc, const char **argv)
 {
-    /* parse buff */
-    
-    if (sendto(sock,parsedBuff,strlen(line)+1,0,(struct sockaddr *)&dest, sizeof(dest)) == -1) {
-        perror("sendto"); exit(1);
-    }
-    
-}
-
-int main(int argc, char *argv[])
-{
-    int n;
-    int port;
-    int sock;
     struct sockaddr_in dest;
-    int fromlen;
-    char message[80];
-    char buff[80];
-    struct addrinfo *result;
-    FILE *fd;
-    fd = NULL;
-    
-    fromlen = sizeof(exp);
-    n=0;
-    
-    if(argc < 4){
-        printf("missing arg");
-    }
-    
-    port = atoi(argv[2]);
-    
-    
-    
+    int sock;
+    int fromlen = sizeof(dest);
+    char message[SIZE_MSG];
+    char reponse[SIZE_MSG];;
+    int PORTSERV=atoi(argv[2]);
     if ((sock = socket(AF_INET,SOCK_DGRAM,0)) == -1) {
-        perror("socket"); exit(1);
-    }
-    
-    /* creation de la socket */
-    if ((sock = socket(AF_INET,SOCK_DGRAM,0)) < 0) {
-        perror("socket");exit(1);
-    }
-    
-    /* Remplir la structure dest */
-    if (getaddrinfo(argv[1], 0, 0, &result) != 0) {
-        perror("getaddrinfo"); exit(EXIT_FAILURE);
+        perror("socket");
+        exit(1);
     }
     
     memset((char *)&dest,0, sizeof(dest));
-    memcpy((void*)&((struct sockaddr_in*)result->ai_addr)->sin_addr, (void*)&dest.sin_addr, sizeof(dest));
+    
     dest.sin_family = AF_INET;
     dest.sin_port = htons(PORTSERV);
+    dest.sin_addr.s_addr = inet_addr(argv[1]);
     
-    while((n = read(stdin, buff, 256)) > 0)
-        send_to_server(sock,buff,dest);
     
-    /* Envoyer le message
-     if (sendto(sock,message,strlen(message)+1,0,(struct sockaddr *)&dest, sizeof(dest)) == -1) {
-     perror("sendto"); exit(1);
-     }
-     */
-    
+    while((fgets(message,SIZE_MSG,stdin))!=NULL)
+    {
+        if(strlen(message)<=1) break;
+        printf("msg: %d\n",strlen(message));
+        if (sendto(sock,message,SIZE_MSG,0, (struct sockaddr *)&dest, sizeof(dest)) == -1) {
+            perror("sendto"); exit(1);
+        }
+        
+        if (recvfrom(sock,reponse,SIZE_MSG,0,0,&fromlen) == -1) {
+            perror("recvfrom"); exit(1);
+        }
+        printf("Reponse: %s\n",reponse);
+    }
     
     close(sock);
-    return 0;
+    return(0);
 }

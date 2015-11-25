@@ -7,26 +7,31 @@
 #include <errno.h>
 #include <time.h>
 
+#include <sys/un.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <string.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+
+
 
 #define MSG_SIZE 128
 
-void manage_requests( char* req, FILE fd)
+void manage_requests( char* req, FILE *fd)
 {
-    fwrite(str , strlen(req) , sizeof(req) , fd );
+    fwrite(req , strlen(req) , sizeof(req) , fd );
 }
 
 int main(int argc, char *argv[])
 {
-    int i;
     int tmp;
     int port;
     int sock;
     struct sockaddr_in sin;
     struct sockaddr_in exp;
-    char host[64];
-    int sock ;
     int fromlen;
     char message[80];
     int cpt = 0;
@@ -41,7 +46,6 @@ int main(int argc, char *argv[])
     }
     
     port = atoi(argv[1]);
-    taille = nb_fils*sizeof(int);
     
 
     /* creation de la socket */
@@ -62,15 +66,11 @@ int main(int argc, char *argv[])
     
     while (1) {
         /* Reception du message */
-        if ( recvfrom(sc,message,sizeof(message),0,(struct sockaddr *)&exp,&fromlen) == -1) {
+        if ( recvfrom(sock,message,sizeof(message),0,(struct sockaddr *)&exp,(socklen_t *)&fromlen) == -1) {
             perror("recvfrom"); exit(2);
         }
-        
-        /* Affichage de l'expediteur */
-        printf("Client : <IP = %s,PORT = %d> \n", inet_ntoa(exp.sin_addr), ntohs (exp.sin_port));
-        
-     
-        /* printf("Message : %s \n", message); */
+    
+         printf("Message : %s \n", message); 
         
         if (cpt==0) {
             if ((fd = fopen (message, "w")) == NULL) {
@@ -83,11 +83,11 @@ int main(int argc, char *argv[])
         manage_requests(message,fd);
         
         /*** Envoyer la reponse ***/
-        if (sendto(sc,&cpt,sizeof(cpt),0,(struct sockaddr *)&exp,fromlen) == -1) {
+        if (sendto(sock,&cpt,sizeof(cpt),0,(struct sockaddr *)&exp,fromlen) == -1) {
             perror("sendto"); exit(4);
         }
         
-        if (message == "") {
+        if (strlen(message) == 0) {
             break;
         }
 

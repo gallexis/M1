@@ -13,9 +13,12 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <dirent.h>
+#include <pthread.h>
+
 #define SIZEMSG 255
 #define TAILLE_NOM_FICHIER 30
 #define TAILLE_NOM_REPERTOIRE 10
+
 char repertoire[TAILLE_NOM_REPERTOIRE];
 int PORTSERV;
 struct sockaddr_in sin;
@@ -50,7 +53,7 @@ void send_list_of_files(char *path){
         
         /* Erreur lors de l'ouverture du répertoire */
         perror ("opendir: ");
-        return EXIT_FAILURE;
+        exit(EXIT_FAILURE);
     }
     
     strcpy(buff,"##no_more_file##");
@@ -64,7 +67,7 @@ void send_list_of_files(char *path){
 
 
 /* Client ou serveur attend la taille du fichier */
-int get_size(int sock){
+int get_size(){
     char buff[sizeof(int)];
     
     recv(scom,buff,sizeof(buff),0);
@@ -72,7 +75,7 @@ int get_size(int sock){
 }
 
 /* client ou serveur envoie la taille du fichier */
-void send_size(char *path,int sock){
+void send_size(char *path){
     int size;
     FILE *fp;
     
